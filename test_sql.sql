@@ -6,7 +6,6 @@
 	-- Clientes
     -- Ventas realizadas
     -- Productos
-    -- Stock de Productos
     -- Categoria de productos
     -- Empleados
 -- Creación de la base de datos de "Pedidos Online"
@@ -25,22 +24,37 @@ telefono_cliente VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE productos(
-id_producto INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+id_producto INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
 nombre_producto VARCHAR(50) NOT NULL,
-id_categoria INT NOT NULL,
-stock_producto INT NOT NULL
+id_categoria INT,
+stock INT DEFAULT 0,
+FOREIGN KEY (id_categoria) REFERENCES categoria_producto(id_categoria)
 );
 
--- Pendiente de Ver stocks
-CREATE_TABLE stock
+
+CREATE TABLE categoria_producto(
+id_categoria INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+tipo_producto VARCHAR(50),
+descripcion_producto VARCHAR(100)
+);
+
+CREATE TABLE empleados(
+id_empleado INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+nombre_empleado VARCHAR(50) NOT NULL,
+apellido_empleado VARCHAR(50) NOT NULL,
+email_empleado VARCHAR(50) NOT NULL,
+telefono_empleado INT NOT NULL
+);
+
 
 CREATE TABLE ventas_realizadas(
 id_venta INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
 id_cliente INT NOT NULL,
 id_producto INT NOT NULL,
+id_empleado INT NOT NULL,
 fecha_venta DATETIME DEFAULT CURRENT_TIMESTAMP,
 FOREIGN KEY (id_cliente) REFERENCES clientes(id_cliente),
-FOREIGN KEY (id_producto) REFERENCES productos(id_producto),
+FOREIGN KEY (id_producto) REFERENCES productos(id_producto)
 );
 
 SELECT * FROM clientes;
