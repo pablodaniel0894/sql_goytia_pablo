@@ -23,6 +23,13 @@ email_cliente VARCHAR(50) NOT NULL,
 telefono_cliente VARCHAR(50) NOT NULL
 );
 
+
+CREATE TABLE categoria_producto(
+id_categoria INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+nombre_categoria VARCHAR(50),
+descripcion_producto VARCHAR(100)
+);
+
 CREATE TABLE productos(
 id_producto INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
 nombre_producto VARCHAR(50) NOT NULL,
@@ -32,18 +39,14 @@ FOREIGN KEY (id_categoria) REFERENCES categoria_producto(id_categoria)
 );
 
 
-CREATE TABLE categoria_producto(
-id_categoria INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
-tipo_producto VARCHAR(50),
-descripcion_producto VARCHAR(100)
-);
+
 
 CREATE TABLE empleados(
 id_empleado INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 nombre_empleado VARCHAR(50) NOT NULL,
 apellido_empleado VARCHAR(50) NOT NULL,
 email_empleado VARCHAR(50) NOT NULL,
-telefono_empleado INT NOT NULL
+telefono_empleado VARCHAR(50) NOT NULL
 );
 
 
@@ -54,7 +57,8 @@ id_producto INT NOT NULL,
 id_empleado INT NOT NULL,
 fecha_venta DATETIME DEFAULT CURRENT_TIMESTAMP,
 FOREIGN KEY (id_cliente) REFERENCES clientes(id_cliente),
-FOREIGN KEY (id_producto) REFERENCES productos(id_producto)
+FOREIGN KEY (id_producto) REFERENCES productos(id_producto),
+FOREIGN KEY (id_empleado) REFERENCES empleados(id_empleado)
 );
 
 SELECT * FROM clientes;
