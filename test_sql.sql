@@ -1,5 +1,5 @@
 -- Introducción: La implementación de un nuevo sistema para mejorar las ventas de un local comercial de barrio, en el cual sus principales ventas son las comidas y bebidas.
--- Situacion Problemática: Un comercio barrial quiere empezar a incursionar en el mundo de los pedidos online. Para ello, necesita establecer ciertas bases de datos para llevarlo a cabo lo mas eficiente posible. Esta mejora permitiria establecer un control mas eficientes sobre los productos, ventas y clientes.
+-- Situacion Problemática: Un comercio barrial quiere empezar a incursionar en el mundo de los pedidos online. Para ello, necesita establecer ciertas bases de datos para llevarlo a cabo lo mas eficiente posible. Esta mejora permitiria establecer un control mas certero sobre los productos, ventas y clientes.
 -- Descripcion de la base de datos: 
 -- Diagrama Entidad-Relación: Se envia adjunto.
 -- Listado de tablas: Se crearán tablas vinculadas con la siguiente descripción (las mismas se encontrarán detalladas a la hora de ejecutar la creacion de las tablas):
@@ -8,8 +8,9 @@
     -- Productos
     -- Categoria de productos
     -- Empleados
+
 -- Creación de la base de datos de "Pedidos Online"
-CREATE DATABASE pedidos_online;
+CREATE DATABASE IF NOT EXISTS pedidos_online;
 
 -- Selección de la base de datos para trabajar.
 USE pedidos_online;
@@ -61,4 +62,4 @@ FOREIGN KEY (id_producto) REFERENCES productos(id_producto),
 FOREIGN KEY (id_empleado) REFERENCES empleados(id_empleado)
 );
 
-SELECT * FROM clientes;
+SELECT * FROM ventas_realizadas;
