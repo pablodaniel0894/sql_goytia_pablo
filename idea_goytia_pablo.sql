@@ -66,3 +66,81 @@ FOREIGN KEY (id_empleado) REFERENCES empleados(id_empleado)
 
 
 SELECT * FROM ventas_realizadas;
+-- Se crea una vista para poder visualizar las ventas detalladas
+CREATE VIEW vista_ventas_detalladas AS
+SELECT 
+    v.id_venta,
+    CONCAT(c.nombre_cliente, ' ', c.apellido_cliente) AS cliente,
+    p.nombre_producto,
+    cp.nombre_categoria,
+    CONCAT(e.nombre_empleado, ' ', e.apellido_empleado) AS empleado,
+    v.fecha_venta
+FROM ventas_realizadas v
+JOIN clientes c ON v.id_cliente = c.id_cliente
+JOIN productos p ON v.id_producto = p.id_producto
+LEFT JOIN categoria_producto cp ON p.id_categoria = cp.id_categoria
+JOIN empleados e ON v.id_empleado = e.id_empleado;
+
+-- Se crea una vista para poder visualizar cuando existe un stock bajo
+CREATE VIEW stock_bajo AS
+SELECT nombre_producto, stock
+FROM productos
+WHERE stock < 10;
+
+-- Se crea un stored procedure para registrar ventas realizadas
+DELIMITER //
+CREATE PROCEDURE registros_ventas(
+	IN p_id_cliente INT,
+    IN p_id_producto INT,
+    IN p_id_empleado INT
+)
+BEGIN
+	DECLARE stock_actual INT;
+    SELECT stock INTO stock_actual
+    FROM productos
+    WHERE id_producto = p_id_producto;
+    
+    -- Verificar el stock e insertar la venta
+    IF stock_actual > 0 THEN
+    INSERT INTO ventas_realizadas(id_cliente, id_producto, id_empleado)
+    VALUES (p_id_cliente, p_id_producto, p_id_empleado);
+    
+    -- se descuenta el stock
+    UPDATE productos
+    SET stock = stock - 1
+    WHERE id_producto = p_id_producto;
+	ELSE
+    SIGNAL SQLSTATE '45000'
+    SET MESSAGE_TEXT = 'Stock Insuficiente para ejecutar la venta';
+    END IF;
+END //
+DELIMITER ;
+
+-- Insertar Clientes -test-
+INSERT INTO clientes (nombre_cliente, apellido_cliente, email_cliente, telefono_cliente)
+VALUES 
+('Ana', 'Pérez', 'ana.perez@email.com', '123456789'),
+('Juan', 'García', 'juan.garcia@email.com', '987654321'),
+('Lucía', 'Martínez', 'lucia.martinez@email.com', '111222333');
+
+INSERT INTO categoria_producto (nombre_categoria, descripcion_categoria)
+VALUES 
+('Electrónica', 'Productos electrónicos'),
+('Ropa', 'Prendas de vestir'),
+('Hogar', 'Artículos para el hogar');
+
+INSERT INTO productos (nombre_producto, id_categoria, stock)
+VALUES 
+('Auriculares Bluetooth', 1, 10),
+('Remera Algodón', 2, 5),
+('Lámpara LED', 3, 2);
+
+INSERT INTO empleados (nombre_empleado, apellido_empleado, email_empleado, telefono_empleado)
+VALUES 
+('Carlos', 'Ramírez', 'carlos.ramirez@email.com', '444555666'),
+('Marta', 'López', 'marta.lopez@email.com', '777888999');
+
+CALL registros_ventas(1,1,1);
+
+SELECT * FROM ventas_realizadas;
+SELECT * FROM productos WHERE id_producto = 1;
