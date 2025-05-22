@@ -8,8 +8,13 @@
     -- Productos
     -- Categoria de productos
     -- Empleados
+-- Vistas creadas: Una vista llamada 'vista_ventas_detalladas' en la cual detalla las ventas realizadas y otra vista llamada 'stock_bajo' donde pueda enmarcar aquellos prodcutos que pueden faltar.
+-- Stored procedures creados: 'registros_ventas' : este proceso almacenado inserta las ventas que se lleguen a realizar y, a su vez, segun el producto elegido, descuenta el stock que vaya a realizar. En caso que no haya stock, arrojara el resultado de no hay stock suficien
+-- Triggers creados: Se creo un trigger en el cual cada vez que haya una venta o modificación del stock, este actualizado en un registro.
+
 
 -- Creación de la base de datos de "Pedidos Online"
+
 CREATE DATABASE IF NOT EXISTS pedidos_online;
 
 -- Selección de la base de datos para trabajar.
@@ -116,31 +121,27 @@ BEGIN
 END //
 DELIMITER ;
 
--- Insertar Clientes -test-
-INSERT INTO clientes (nombre_cliente, apellido_cliente, email_cliente, telefono_cliente)
-VALUES 
-('Ana', 'Pérez', 'ana.perez@email.com', '123456789'),
-('Juan', 'García', 'juan.garcia@email.com', '987654321'),
-('Lucía', 'Martínez', 'lucia.martinez@email.com', '111222333');
+-- Auditoria de stock
+CREATE TABLE auditoria_stock(
+id_auditoria INT PRIMARY KEY AUTO_INCREMENT,
+id_producto INT,
+stock_anterior INT,
+stock_nuevo INT,
+fecha_modificacion DATETIME DEFAULT CURRENT_TIMESTAMP
+);
 
-INSERT INTO categoria_producto (nombre_categoria, descripcion_categoria)
-VALUES 
-('Electrónica', 'Productos electrónicos'),
-('Ropa', 'Prendas de vestir'),
-('Hogar', 'Artículos para el hogar');
+DELIMITER //
+CREATE TRIGGER auditar_stock
+BEFORE UPDATE ON productos
+FOR EACH ROW
+BEGIN
+	IF OLD.stock <> NEW.stock THEN
+	INSERT INTO auditoria_stock(
+id_producto, stock_anterior, stock_nuevo
+	) VALUES (
+	OLD.id_producto, OLD.stock, NEW.stock
+);
+END IF;
+END //
 
-INSERT INTO productos (nombre_producto, id_categoria, stock)
-VALUES 
-('Auriculares Bluetooth', 1, 10),
-('Remera Algodón', 2, 5),
-('Lámpara LED', 3, 2);
-
-INSERT INTO empleados (nombre_empleado, apellido_empleado, email_empleado, telefono_empleado)
-VALUES 
-('Carlos', 'Ramírez', 'carlos.ramirez@email.com', '444555666'),
-('Marta', 'López', 'marta.lopez@email.com', '777888999');
-
-CALL registros_ventas(1,1,1);
-
-SELECT * FROM ventas_realizadas;
-SELECT * FROM productos WHERE id_producto = 1;
+DELIMITER ;
