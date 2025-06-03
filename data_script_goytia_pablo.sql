@@ -8,27 +8,54 @@ VALUES
 ('Juan', 'García', 'juan.garcia@email.com', '987654321'),
 ('Lucía', 'Martínez', 'lucia.martinez@email.com', '111222333');
 
+INSERT INTO direccion_clientes(id_cliente, direccion, ciudad, provincia, codigo_postal)
+VALUES
+(1, 'Avenida Juan B Justo 6100','Ciudad de Buenos Aires', 'CABA', '1416'),
+(2, 'Avenida 9 de Julio 100', 'Ciudad de Buenos Aires', 'CABA', '1450'),
+(3, 'Avenida San Martin 2030', 'San Martín', 'Provincia de Buenos Aires', '2340');
+
 INSERT INTO categoria_producto (nombre_categoria, descripcion_categoria)
 VALUES 
-('Electrónica', 'Productos electrónicos'),
-('Ropa', 'Prendas de vestir'),
-('Hogar', 'Artículos para el hogar');
+('Bebidas', 'Bebidas alcohólicas y sin alcohol'),
+('Comidas', 'Alimentos preparados o envasados');
 
 INSERT INTO productos (nombre_producto, id_categoria, stock)
 VALUES 
-('Auriculares Bluetooth', 1, 10),
-('Remera Algodón', 2, 5),
-('Lámpara LED', 3, 2);
+('Coca-Cola 1.5L', 1, 20),
+('Empanada de Carne', 2, 5),
+('Cerveza Quilmes 1L', 1, 8),
+('Pizza Muzzarella', 2, 12);
 
 INSERT INTO empleados (nombre_empleado, apellido_empleado, email_empleado, telefono_empleado)
 VALUES 
 ('Carlos', 'Ramírez', 'carlos.ramirez@email.com', '444555666'),
-('Marta', 'López', 'marta.lopez@email.com', '777888999');
+('Marta', 'López', 'marta.lopez@email.com', '777888999'),
+('Juan', 'Pérez', 'juan.perez@email.com', '123456789');
 
-CALL registros_ventas(1,4,1);
-CALL registros_ventas(2,4,1);
+INSERT INTO medios_de_pago(metodo_pago)
+VALUES 
+('Efectivo'),
+('Tarjeta de Crédito'),
+('Mercado Pago');
+
+INSERT INTO proveedores(nombre_proveedor, telefono_proveedor, email_proveedor)
+VALUES 
+('Bebidas Sahur.', '1133557799', 'Bebidas@Sahur.com'),
+('Comidas Bombardino Crocodrilo', '1144226688', 'Bombardino@Crocodrilo.com');
+
+INSERT INTO productos_proveedores(id_producto, id_proveedor, precio_compra)
+VALUES 
+(1, 1, 120.50),
+(3, 1, 150.00),
+(2, 2, 80.00),
+(4, 2, 100.00);
+
+CALL registros_ventas(1, 1, 1, 2, 300.00);
+CALL registros_ventas(2, 4, 2, 1, 850.00);
 
 SELECT * FROM stock_bajo;
+
+SELECT * FROM productOS;
 SELECT * FROM vista_ventas_detalladas;
 SELECT * FROM auditoria_stock;
 SELECT * FROM productos WHERE id_producto = 1;
