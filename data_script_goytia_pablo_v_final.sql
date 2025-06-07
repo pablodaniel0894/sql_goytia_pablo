@@ -50,12 +50,23 @@ VALUES
 (2, 2, 80.00),
 (4, 2, 100.00);
 
-CALL registros_ventas(1, 1, 1, 2, 300.00);
-CALL registros_ventas(2, 4, 2, 1, 850.00);
+CALL registros_ventas(1, 3, 2, 4, 150.00, 1);
+CALL registros_ventas(2, 4, 2, 1, 850.00, 3);
+
+CALL actualizar_stock_producto(1, 10);
 
 SELECT * FROM stock_bajo;
 
-SELECT * FROM productOS;
+SELECT * FROM productos;
 SELECT * FROM vista_ventas_detalladas;
 SELECT * FROM auditoria_stock;
 SELECT * FROM productos WHERE id_producto = 1;
+SELECT * FROM empleados;
+SELECT * FROM proveedores;
+SELECT * FROM productos_mas_vendidos;
+SELECT * FROM ventas_por_cliente;
+SELECT * FROM ventas_por_categoria;
+SELECT * FROM vista_ventas_detalladas;
+SELECT * FROM log_errores;
+SELECT * FROM ventas_realizadas;
+SELECT * FROM clientes;

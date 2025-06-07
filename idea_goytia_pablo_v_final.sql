@@ -8,7 +8,6 @@
     -- Direccion Clientes
     -- Categoria Producto
     -- Productos
-    -- Categoria de productos
     -- Empleados
     -- Medios de Pago
     -- Ventas realizadas
@@ -26,9 +25,16 @@
     -- Ventas por cliente - Cantidad de clientes que realizan las compras.
     -- Productos mas vendidos - Visualiza cuáles son los productos más vendidos
 
--- Stored procedures creados: 'registros_ventas' : este proceso almacenado inserta las ventas que se lleguen a realizar y, a su vez, segun el producto elegido, descuenta el stock que vaya a realizar. En caso que no haya stock, arrojara el resultado de no hay stock suficien
--- Triggers creados: Se creo un trigger en el cual cada vez que haya una venta o modificación del stock, este actualizado en un registro.
-
+-- Stored procedures creados: 
+	-- 'registros_ventas' : este proceso almacenado inserta las ventas que se lleguen a realizar y, a su vez, segun el producto elegido, descuenta el stock que vaya a realizar. En caso que no haya stock, arrojara el resultado de no hay stock suficien
+	-- 'actualizar_stock_producto': Actualiza el stock de cada producto que exista.
+    
+-- Triggers creados: 
+	-- Se creo un trigger en el cual cada vez que haya una venta o modificación del stock, este actualizado en un registro.
+	-- Se creo otro trigger para enmarcar el log de errores que pueda existir.
+    
+-- Usuarios con acceso creados:
+	-- Ventas: Para poder acceder (ver y registrar) ventas.
 
 -- Creación de la base de datos de "Pedidos Online"
 CREATE DATABASE IF NOT EXISTS pedidos_online;
@@ -322,3 +328,9 @@ BEGIN
 END //
 DELIMITER ;
 
+-- Creación de usuario para rol ventas:
+
+-- Usuario para ventas (marta.lopez)
+CREATE USER 'marta.lopez'@'%' IDENTIFIED BY '123Venta';
+GRANT SELECT, INSERT ON pedidos_online.ventas_realizadas TO 'marta.lopez'@'%';
+GRANT SELECT, INSERT ON pedidos_online.detalle_venta TO 'marta.lopez'@'%';
